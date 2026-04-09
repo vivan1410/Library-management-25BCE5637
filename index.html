@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bibliotheca Oxfordensis — Administration Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="frame">
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-title">BIBLIOTHECA OXFORDENSIS <span>|</span> ADMINISTRATION PORTAL</div>
+    <div class="hdr-right">
+      <div class="hdr-name-blk">
+        <div class="hdr-name">Welcome, Dr. Arthur Finch</div>
+        <div class="hdr-role">Librarian</div>
+      </div>
+      <div class="bell-w">🔔<div class="bell-b">1</div></div>
+      <div class="rt-pill">
+        <div class="rt-dot" id="runtimeDot"></div>
+        <span id="runtimeStatus">INIT</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- BODY ROW -->
+  <div class="body-row">
+
+    <!-- SIDEBAR -->
+    <aside class="sb">
+      <div class="sb-crest">
+        <div class="crest-ring">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle cx="40" cy="40" r="37" stroke="#c8a96a" stroke-width="1.2" stroke-dasharray="4 2.5"/>
+            <circle cx="40" cy="40" r="29" stroke="#c8a96a" stroke-width="0.7" opacity="0.55"/>
+            <!-- Shield -->
+            <path d="M27 24 L53 24 L53 47 Q53 58 40 64 Q27 58 27 47 Z" fill="rgba(200,169,106,0.1)" stroke="#c8a96a" stroke-width="0.8" opacity="0.7"/>
+            <!-- Book on shield -->
+            <path d="M40 32 L40 46" stroke="#c8a96a" stroke-width="0.9" opacity="0.85"/>
+            <path d="M32 35 Q36 32 40 32 L40 46 Q36 45 32 45 Z" fill="#c8a96a" opacity="0.32"/>
+            <path d="M48 35 Q44 32 40 32 L40 46 Q44 45 48 45 Z" fill="#c8a96a" opacity="0.2"/>
+            <!-- Crown -->
+            <path d="M29 21 L32 27 L40 24 L48 27 L51 21 L53 21 L50.5 29 L29.5 29 L27 21 Z" fill="#c8a96a" opacity="0.7"/>
+            <!-- Circular text -->
+            <defs><path id="cr" d="M40,5 a35,35 0 1,1 -0.01,0"/></defs>
+            <text font-family="'Cinzel',serif" font-size="5" fill="#c8a96a" opacity="0.5" letter-spacing="2">
+              <textPath href="#cr">OXFORDENSIS · BIBLIOTHECA ·</textPath>
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Nav: exactly the 7 C++ operations -->
+      <nav class="sb-nav">
+        <div class="nav-item active" id="nav-1" onclick="navSend('1')">
+          <div class="nav-ico">📖</div><div class="nav-lbl">Add Book</div>
+        </div>
+        <div class="nav-item" id="nav-2" onclick="navSend('2')">
+          <div class="nav-ico">📤</div><div class="nav-lbl">Issue Book</div>
+        </div>
+        <div class="nav-item" id="nav-3" onclick="navSend('3')">
+          <div class="nav-ico">📥</div><div class="nav-lbl">Return Book</div>
+        </div>
+        <div class="nav-item" id="nav-4" onclick="navSend('4')">
+          <div class="nav-ico">🔍</div><div class="nav-lbl">Search</div>
+        </div>
+        <div class="nav-item" id="nav-5" onclick="navSend('5')">
+          <div class="nav-ico">📋</div><div class="nav-lbl">View Issued</div>
+        </div>
+        <div class="nav-item" id="nav-6" onclick="navSend('6')">
+          <div class="nav-ico">📊</div><div class="nav-lbl">Inventory</div>
+        </div>
+        <div class="nav-item" id="nav-7" onclick="navSend('7')" style="border-top:1px solid rgba(200,169,106,0.15);margin-top:auto;">
+          <div class="nav-ico">🚪</div><div class="nav-lbl" style="color:rgba(255,110,100,0.65);">Exit</div>
+        </div>
+      </nav>
+
+      <div class="sb-footer">
+        <!-- Cathedral SVG -->
+        <svg width="78" height="52" viewBox="0 0 78 52" opacity="0.42">
+          <rect x="23" y="26" width="32" height="26" fill="#c8a96a"/>
+          <rect x="4"  y="18" width="17" height="34" fill="#c8a96a"/>
+          <rect x="57" y="18" width="17" height="34" fill="#c8a96a"/>
+          <polygon points="12.5,18 12.5,4 21,18"  fill="#c8a96a"/>
+          <polygon points="65.5,18 65.5,4 57,18"  fill="#c8a96a"/>
+          <polygon points="34,26 39,10 44,26"     fill="#c8a96a"/>
+          <rect x="11" y="23" width="6" height="9" rx="3" fill="#071a10"/>
+          <rect x="61" y="23" width="6" height="9" rx="3" fill="#071a10"/>
+          <rect x="28" y="31" width="5" height="7" rx="3" fill="#071a10"/>
+          <rect x="45" y="31" width="5" height="7" rx="3" fill="#071a10"/>
+          <rect x="34" y="40" width="10" height="12" rx="2" fill="#071a10"/>
+        </svg>
+        <div style="font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(200,169,106,0.62);">Bodleian</div>
+        <div class="sb-clock" id="clock">--:-- --</div>
+      </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main">
+
+      <!-- ══ STAT CARDS — 3 columns ══ -->
+      <div class="cards-row">
+
+        <!-- TOTAL BOOKS -->
+        <div class="stat-card sc-total">
+          <span class="cc cc-tl"></span>
+          <span class="cc cc-tr"></span>
+          <span class="cc cc-bl"></span>
+          <span class="cc cc-br"></span>
+          <div class="card-tag">TOTAL BOOKS</div>
+          <div class="card-illus">
+            <img src="book_total.png" alt="Antique Book" style="max-height:110px;width:auto;object-fit:contain;"/>
+            <!-- HIDDEN SVG fallback -->
+            <svg viewBox="0 0 130 138" style="display:none;height:100%;max-height:100px;width:auto;">
+              <defs>
+                <linearGradient id="cv1" x1="0%" y1="0%" x2="100%" y2="110%">
+                  <stop offset="0%"   stop-color="#9b5a20"/>
+                  <stop offset="40%"  stop-color="#b86c28"/>
+                  <stop offset="100%" stop-color="#602e08"/>
+                </linearGradient>
+                <linearGradient id="sp1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%"  stop-color="#3e1c06"/>
+                  <stop offset="100%" stop-color="#6a3010"/>
+                </linearGradient>
+                <radialGradient id="sh1" cx="28%" cy="22%" r="60%">
+                  <stop offset="0%" stop-color="rgba(255,225,170,0.18)"/>
+                  <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+                </radialGradient>
+                <filter id="bsf1"><feDropShadow dx="4" dy="7" stdDeviation="6" flood-color="#1a0800" flood-opacity="0.5"/></filter>
+              </defs>
+              <!-- Pages block -->
+              <rect x="34" y="12" width="82" height="112" rx="2" fill="#f0e5cb"/>
+              <!-- Spine -->
+              <rect x="14" y="12" width="22" height="112" rx="3" fill="url(#sp1)"/>
+              <!-- Cover -->
+              <rect x="14" y="12" width="102" height="112" rx="4" fill="url(#cv1)" filter="url(#bsf1)"/>
+              <!-- Sheen -->
+              <rect x="14" y="12" width="102" height="112" rx="4" fill="url(#sh1)"/>
+              <!-- Spine crease -->
+              <rect x="35" y="12" width="4" height="112" fill="rgba(0,0,0,0.16)"/>
+              <!-- Gold oval emblem -->
+              <ellipse cx="76" cy="68" rx="24" ry="32" fill="none" stroke="#c8a96a" stroke-width="2" opacity="0.88"/>
+              <ellipse cx="76" cy="68" rx="16" ry="22" fill="none" stroke="#c8a96a" stroke-width="1.2" opacity="0.6"/>
+              <line x1="76" y1="48" x2="76" y2="88" stroke="#c8a96a" stroke-width="1" opacity="0.45"/>
+              <line x1="58" y1="68" x2="94" y2="68" stroke="#c8a96a" stroke-width="1" opacity="0.45"/>
+              <!-- Corner pieces -->
+              <rect x="18" y="15" width="10" height="10" rx="1" fill="none" stroke="#c8a96a" stroke-width="1.2" opacity="0.75"/>
+              <rect x="108" y="15" width="10" height="10" rx="1" fill="none" stroke="#c8a96a" stroke-width="1.2" opacity="0.75"/>
+              <rect x="18" y="111" width="10" height="10" rx="1" fill="none" stroke="#c8a96a" stroke-width="1.2" opacity="0.75"/>
+              <rect x="108" y="111" width="10" height="10" rx="1" fill="none" stroke="#c8a96a" stroke-width="1.2" opacity="0.75"/>
+              <!-- Bookmark ribbon -->
+              <path d="M98 12 L107 12 L107 35 L102.5 30 L98 35 Z" fill="#8a1820" opacity="0.9"/>
+              <!-- Spine lines -->
+              <line x1="14" y1="32" x2="36" y2="32" stroke="#c8a96a" stroke-width="0.7" opacity="0.5"/>
+              <line x1="14" y1="100" x2="36" y2="100" stroke="#c8a96a" stroke-width="0.7" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="card-num" id="stat-total">0</div>
+        </div>
+
+        <!-- AVAILABLE -->
+        <div class="stat-card sc-avail">
+          <span class="cc cc-tl"></span>
+          <span class="cc cc-tr"></span>
+          <span class="cc cc-bl"></span>
+          <span class="cc cc-br"></span>
+          <div class="card-tag">AVAILABLE</div>
+          <div class="card-illus">
+            <img src="book_available.png" alt="Open Book" style="max-height:110px;width:auto;object-fit:contain;"/>
+            <!-- HIDDEN SVG fallback -->
+            <svg viewBox="0 0 155 125" style="display:none;height:100%;max-height:96px;width:auto;">
+              <defs>
+                <linearGradient id="pgl" x1="0%" y1="0%" x2="100%" y2="5%">
+                  <stop offset="0%" stop-color="#d4c090"/><stop offset="100%" stop-color="#f0e6cc"/>
+                </linearGradient>
+                <linearGradient id="pgr" x1="0%" y1="0%" x2="100%" y2="5%">
+                  <stop offset="0%" stop-color="#f0e6cc"/><stop offset="100%" stop-color="#e0d0a8"/>
+                </linearGradient>
+                <linearGradient id="cov" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#7a5225"/><stop offset="100%" stop-color="#9a6a35"/>
+                </linearGradient>
+                <filter id="bsf2"><feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#1a0800" flood-opacity="0.4"/></filter>
+              </defs>
+              <ellipse cx="77" cy="117" rx="54" ry="6" fill="rgba(0,0,0,0.18)"/>
+              <!-- Left spine edge -->
+              <path d="M2 22 Q5 18 5 22 L5 98 Q2 102 2 98 Z" fill="url(#cov)" opacity="0.65"/>
+              <!-- Right spine edge -->
+              <path d="M153 22 Q150 18 150 22 L150 98 Q153 102 153 98 Z" fill="url(#cov)" opacity="0.65"/>
+              <!-- Left page -->
+              <path d="M5 22 Q10 18 77 24 L77 104 Q10 98 5 102 Z" fill="url(#pgl)" filter="url(#bsf2)"/>
+              <!-- Right page -->
+              <path d="M150 22 Q145 18 78 24 L78 104 Q145 98 150 102 Z" fill="url(#pgr)" filter="url(#bsf2)"/>
+              <!-- Spine -->
+              <path d="M77 24 C77 24 78 23.5 78 24 L78 104 C78 104 77 104.5 77 104 Z" fill="rgba(0,0,0,0.14)"/>
+              <!-- Left lines -->
+              <line x1="16" y1="33" x2="72" y2="34.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="40" x2="72" y2="41.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="47" x2="72" y2="48.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="54" x2="72" y2="55.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="61" x2="72" y2="62.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="68" x2="72" y2="69.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="75" x2="72" y2="76.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="82" x2="72" y2="83.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="16" y1="89" x2="72" y2="90.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <!-- Right lines -->
+              <line x1="83" y1="33" x2="139" y2="31.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="40" x2="139" y2="38.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="47" x2="139" y2="45.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="54" x2="139" y2="52.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="61" x2="139" y2="59.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="68" x2="139" y2="66.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="75" x2="139" y2="73.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="82" x2="139" y2="80.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+              <line x1="83" y1="89" x2="139" y2="87.5" stroke="#9a8050" stroke-width="0.9" opacity="0.55"/>
+            </svg>
+          </div>
+          <div class="card-num" id="stat-avail">0</div>
+        </div>
+
+        <!-- ISSUED -->
+        <div class="stat-card sc-issued">
+          <span class="cc cc-tl"></span>
+          <span class="cc cc-tr"></span>
+          <span class="cc cc-bl"></span>
+          <span class="cc cc-br"></span>
+          <div class="card-tag">ISSUED</div>
+          <div class="card-illus">
+            <img src="book_issued.png" alt="Hand Holding Book" style="max-height:110px;width:auto;object-fit:contain;"/>
+            <!-- HIDDEN SVG fallback -->
+            <svg viewBox="0 0 130 135" style="display:none;height:100%;max-height:102px;width:auto;">
+              <defs>
+                <linearGradient id="bcv2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8a6022"/><stop offset="100%" stop-color="#4a2c08"/>
+                </linearGradient>
+                <linearGradient id="glov" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#4a3618"/><stop offset="100%" stop-color="#2e200a"/>
+                </linearGradient>
+                <linearGradient id="glov2" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#5e4820"/><stop offset="100%" stop-color="#3a2c10"/>
+                </linearGradient>
+                <filter id="bsf3"><feDropShadow dx="3" dy="6" stdDeviation="5" flood-color="#1a0800" flood-opacity="0.45"/></filter>
+              </defs>
+              <!-- Book (tilted slightly) -->
+              <g transform="rotate(-14, 72, 55)" filter="url(#bsf3)">
+                <rect x="26" y="8"  width="12" height="78" rx="3" fill="#3a1c06"/>
+                <rect x="26" y="8"  width="64" height="78" rx="4" fill="url(#bcv2)"/>
+                <rect x="38" y="8"  width="3"  height="78" fill="rgba(0,0,0,0.16)"/>
+                <rect x="95" y="10" width="4"  height="74" rx="1" fill="#f0e6cc"/>
+                <ellipse cx="72" cy="47" rx="13" ry="19" fill="none" stroke="#c8a96a" stroke-width="1.5" opacity="0.82"/>
+                <ellipse cx="72" cy="47" rx="8"  ry="12" fill="none" stroke="#c8a96a" stroke-width="0.9" opacity="0.58"/>
+                <line x1="72" y1="33" x2="72" y2="61" stroke="#c8a96a" stroke-width="0.9" opacity="0.45"/>
+                <line x1="63" y1="47" x2="81" y2="47" stroke="#c8a96a" stroke-width="0.9" opacity="0.45"/>
+              </g>
+              <!-- Gloved hand -->
+              <ellipse cx="62" cy="107" rx="30" ry="16" fill="url(#glov2)" filter="url(#bsf3)"/>
+              <rect x="20" y="92"  width="11" height="24" rx="5" fill="url(#glov)"/>
+              <rect x="33" y="88"  width="11" height="26" rx="5" fill="url(#glov)"/>
+              <rect x="47" y="86"  width="11" height="28" rx="5" fill="url(#glov)"/>
+              <rect x="61" y="88"  width="11" height="26" rx="5" fill="url(#glov)"/>
+              <ellipse cx="22" cy="105" rx="8" ry="11" fill="url(#glov2)"/>
+              <!-- Cuff -->
+              <path d="M8 120 Q62 130 116 120 L116 135 L8 135 Z" fill="#0b1f3a" opacity="0.35"/>
+            </svg>
+          </div>
+          <div class="card-num" id="stat-issued">0</div>
+        </div>
+
+      </div><!-- /cards-row -->
+
+      <!-- ══ LOWER PANELS — 2 columns ══ -->
+      <div class="lower-row">
+
+        <!-- Circulation Activities -->
+        <div class="panel">
+          <div class="panel-hdr">
+            <div class="panel-title">CIRCULATION ACTIVITIES</div>
+            <div class="panel-orn">── ✦ ──</div>
+          </div>
+          <div class="circ-body">
+            <table class="circ-tbl">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Book ID</th>
+                  <th>Book Title</th>
+                  <th>Status</th>
+                  <th>Due Date</th>
+                </tr>
+              </thead>
+              <tbody id="circ-tbody">
+                <tr>
+                  <td colspan="5" style="text-align:center;padding:20px;font-family:'EB Garamond','Garamond',serif;font-style:italic;color:#9c7a50;font-size:0.88rem;">
+                    No circulation records yet.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System Log / Activity Terminal -->
+        <div class="panel">
+          <div class="panel-hdr">
+            <div class="panel-title">SYSTEM LOG / ACTIVITY TERMINAL</div>
+            <div class="panel-orn">──✦──</div>
+          </div>
+          <div class="log-body" id="output-wrapper"></div>
+          <div class="log-in" id="terminal-input-row">
+            <span class="log-sym">→</span>
+            <input type="text" id="term-input"
+                   placeholder="Enter menu number (1–7)…"
+                   autocomplete="off" spellcheck="false"/>
+            <button class="sub-btn" id="submitBtn">Submit</button>
+          </div>
+        </div>
+
+      </div><!-- /lower-row -->
+    </div><!-- /main -->
+  </div><!-- /body-row -->
+</div><!-- /frame -->
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+  /* ══════════════════════════════════════════
+     SUPABASE CONFIG
+  ══════════════════════════════════════════ */
+  var SUPABASE_URL = 'https://avotfkkmwggflruwqvyp.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2b3Rma2ttd2dnZmxydXdxdnlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MzUzODAsImV4cCI6MjA5MTMxMTM4MH0.4Fy1ilSrfsbzk0M7N3pv4cW6C-5tHzzw6-sSKCDOdGc';
+
+  /* Low-level REST helper */
+  function sbFetch(path, method, body) {
+    var opts = {
+      method: method || 'GET',
+      headers: {
+        'apikey':        SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type':  'application/json',
+        'Prefer':        'return=minimal'
+      }
+    };
+    if (body !== undefined) opts.body = JSON.stringify(body);
+    return fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
+  }
+
+  /* Sync helpers — fire-and-forget, errors go to console */
+  function syncAdd(id, title, author) {
+    if (!id) return;
+    sbFetch('books', 'POST', { id: id, title: title, author: author, status: 'Available', issued_to: '' })
+      .then(function(r) {
+        if (!r.ok) r.text().then(function(t) { console.error('[Supabase] Add failed:', t); });
+        else appendLog('[DB] Book saved to cloud ✓', 'l-ok');
+      })
+      .catch(function(e) { console.error('[Supabase] Add error:', e); });
+  }
+
+  function syncIssue(id, regNo) {
+    if (!id) return;
+    sbFetch('books?id=eq.' + encodeURIComponent(id), 'PATCH', { status: 'Issued', issued_to: regNo })
+      .then(function(r) {
+        if (!r.ok) r.text().then(function(t) { console.error('[Supabase] Issue failed:', t); });
+        else appendLog('[DB] Issue status synced ✓', 'l-ok');
+      })
+      .catch(function(e) { console.error('[Supabase] Issue error:', e); });
+  }
+
+  function syncReturn(id) {
+    if (!id) return;
+    sbFetch('books?id=eq.' + encodeURIComponent(id), 'PATCH', { status: 'Available', issued_to: '' })
+      .then(function(r) {
+        if (!r.ok) r.text().then(function(t) { console.error('[Supabase] Return failed:', t); });
+        else appendLog('[DB] Return status synced ✓', 'l-ok');
+      })
+      .catch(function(e) { console.error('[Supabase] Return error:', e); });
+  }
+
+  /* ══════════════════════════════════════════
+     CLOCK
+  ══════════════════════════════════════════ */
+  function updateClock() {
+    var d  = new Date();
+    var hh = String(d.getHours()).padStart(2,'0');
+    var mm = String(d.getMinutes()).padStart(2,'0');
+    var tz = d.toLocaleTimeString('en-GB',{timeZoneName:'short'}).split(' ').pop() || 'IST';
+    document.getElementById('clock').textContent = hh + ':' + mm + ' ' + tz;
+  }
+  updateClock(); setInterval(updateClock, 10000);
+
+  /* ══════════════════════════════════════════
+     UI STATE
+  ══════════════════════════════════════════ */
+  window.inputReady      = false;
+  window.inputValue      = '';
+  var pendingAction      = '';
+  var pendingDetail      = '';
+  var userHasInteracted  = false;
+  var bookTitleMap       = {};   /* bookId → title, for display in circ table */
+  var viewResultScrollPos = -1; /* scroll anchor for list/count results (-1 = off) */
+
+  var navMap = {'1':'1','2':'2','3':'3','4':'4','5':'5','6':'6','7':'7'};
+
+  function appendLog(text, cls) {
+    var w = document.getElementById('output-wrapper');
+    var s = document.createElement('span');
+    s.className   = 'll ' + (cls || 'l-d');
+    s.textContent = text;
+    w.appendChild(s);
+    w.appendChild(document.createElement('br'));
+    /* Only auto-scroll when the user has interacted AND we're not
+       in a "view" operation (list / count) waiting to scroll-back */
+    if (userHasInteracted && viewResultScrollPos < 0) {
+      w.scrollTop = w.scrollHeight;
+    }
+  }
+
+  function submitInput() {
+    userHasInteracted = true;
+    var field = document.getElementById('term-input');
+    var val   = (field.value || '').trim();
+    if (!val) return;
+    appendLog('>> ' + val, 'l-ec');
+    if (/^[1-7]$/.test(val) && pendingAction === '') {
+      var map = {'1':'add','2':'issue','3':'return','4':'search','5':'list','6':'count','7':'exit'};
+      pendingAction = map[val] || '';
+      pendingDetail = '';
+      /* For view-only operations, drop a sentinel element so we can scroll perfectly */
+      if (pendingAction === 'list' || pendingAction === 'count') {
+        viewResultScrollPos = 1; /* just a flag now */
+        var w = document.getElementById('output-wrapper');
+        var anchor = document.createElement('div');
+        anchor.id = 'view-anchor';
+        anchor.style.height = '0';
+        w.appendChild(anchor);
+      }
+    } else {
+      pendingDetail = pendingDetail ? pendingDetail + ' | ' + val : val;
+    }
+    window.inputReady = false;
+    window.inputValue = val;
+    window.inputReady = true;
+    field.value = '';
+  }
+
+  function navSend(num) {
+    document.querySelectorAll('.nav-item').forEach(function(e){ e.classList.remove('active'); });
+    var el = document.getElementById('nav-' + num);
+    if (el) el.classList.add('active');
+    var cppNum = navMap[num] || num;
+    var row = document.getElementById('terminal-input-row');
+    if (row.style.display === 'flex') {
+      document.getElementById('term-input').value = cppNum;
+      submitInput();
+    } else {
+      document.getElementById('term-input').value = cppNum;
+      document.getElementById('term-input').focus();
+    }
+  }
+
+  /* addCircRow(bookId, title, status, cls, due)
+     Columns: Date | Book ID | Book Title | Status | Due Date */
+  function addCircRow(bookId, title, status, cls, due) {
+    var tbody = document.getElementById('circ-tbody');
+    if (tbody.rows.length === 1 && tbody.rows[0].cells.length === 1) tbody.innerHTML = '';
+    var d  = new Date();
+    var dt = String(d.getDate()).padStart(2,'0') + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getFullYear()).slice(-2);
+    var dd = due || (function(){ var x = new Date(d.getTime()+14*86400000); return String(x.getDate()).padStart(2,'0')+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getFullYear()).slice(-2); })();
+    var row = tbody.insertRow(0);
+    row.innerHTML =
+      '<td>' + dt + '</td>' +
+      '<td>' + (bookId||'—') + '</td>' +
+      '<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (title||'—') + '</td>' +
+      '<td><span class="sbadge ' + cls + '">' + status + '</span></td>' +
+      '<td>' + dd + '</td>';
+    while (tbody.rows.length > 8) tbody.deleteRow(tbody.rows.length - 1);
+  }
+
+  function parseStats(text) {
+    var m;
+    m = text.match(/Available Books\s*:\s*(\d+)/i); if(m) document.getElementById('stat-avail').textContent  = Number(m[1]).toLocaleString();
+    m = text.match(/Issued Books\s*:\s*(\d+)/i);    if(m) document.getElementById('stat-issued').textContent = Number(m[1]).toLocaleString();
+    m = text.match(/Total Books\s*:\s*(\d+)/i);     if(m) document.getElementById('stat-total').textContent  = Number(m[1]).toLocaleString();
+  }
+
+  document.getElementById('submitBtn').addEventListener('click', submitInput);
+  document.getElementById('term-input').addEventListener('keydown', function(e){ if(e.key==='Enter') submitInput(); });
+
+  /* ══════════════════════════════════════════
+     EMSCRIPTEN MODULE
+  ══════════════════════════════════════════ */
+  var Module = {
+    canvas: document.getElementById('canvas'),
+
+    /* ── preRun: fetch books from Supabase → write to WASM FS ─────────
+       addRunDependency pauses WASM main() until removeRunDependency is
+       called, so C++ Library::loadFromFile() reads real cloud data.    */
+    preRun: [function() {
+      Module.addRunDependency('supabase-preload');
+
+      fetch(SUPABASE_URL + '/rest/v1/books?select=*&order=id', {
+        headers: {
+          'apikey':        SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY
+        }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(books) {
+        if (Array.isArray(books) && books.length > 0) {
+          /* Serialise to the same pipe-delimited format C++ uses */
+          var lines = books.map(function(b) {
+            return [
+              b.id        || '',
+              b.title     || '',
+              b.author    || '',
+              b.status    || 'Available',
+              b.issued_to || ''
+            ].join('|');
+          });
+          try {
+            FS.writeFile('library_data.txt', lines.join('\n') + '\n');
+
+            /* ── Update stat cards immediately from fetched data ── */
+            var avail  = books.filter(function(b){ return (b.status||'Available') === 'Available'; }).length;
+            var issued = books.filter(function(b){ return b.status === 'Issued'; }).length;
+            document.getElementById('stat-total').textContent  = books.length.toLocaleString();
+            document.getElementById('stat-avail').textContent  = avail.toLocaleString();
+            document.getElementById('stat-issued').textContent = issued.toLocaleString();
+
+            /* ── Pre-fill Circulation Activities table ── */
+            var tbody = document.getElementById('circ-tbody');
+            tbody.innerHTML = '';   /* clear "No circulation records yet." */
+            var today = (function(){
+              var d = new Date();
+              return String(d.getDate()).padStart(2,'0') + '.' +
+                     String(d.getMonth()+1).padStart(2,'0') + '.' +
+                     String(d.getFullYear()).slice(-2);
+            })();
+            books.forEach(function(b) {
+              /* seed title lookup map */
+              if (b.id) bookTitleMap[b.id] = b.title || b.id;
+
+              var isIssued = b.status === 'Issued';
+              var cls      = isIssued ? 'sb-iss' : 'sb-ret';
+              var badge    = isIssued ? 'Issued' : 'Available';
+              var due      = isIssued
+                ? (function(){ var x = new Date(Date.now()+14*86400000); return String(x.getDate()).padStart(2,'0')+'.'+String(x.getMonth()+1).padStart(2,'0')+'.'+String(x.getFullYear()).slice(-2); })()
+                : '—';
+              var row = tbody.insertRow(-1);
+              row.innerHTML =
+                '<td>' + today + '</td>' +
+                '<td>' + (b.id||'—') + '</td>' +
+                '<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (b.title||b.id) + '</td>' +
+                '<td><span class="sbadge ' + cls + '">' + badge + '</span></td>' +
+                '<td>' + due + '</td>';
+            });
+
+            appendLog('[DB] ' + books.length + ' book(s) loaded from Supabase ✓', 'l-ok');
+          } catch(fsErr) {
+            console.error('[Supabase] FS write error:', fsErr);
+          }
+        } else {
+          appendLog('[DB] Connected to Supabase — no books yet.', 'l-sy');
+        }
+        Module.removeRunDependency('supabase-preload');
+      })
+      .catch(function(err) {
+        console.error('[Supabase] Preload failed:', err);
+        appendLog('[DB] Supabase unreachable — starting offline.', 'l-er');
+        Module.removeRunDependency('supabase-preload');
+      });
+    }],
+
+    /* ── print: intercept C++ cout, sync mutations to Supabase ──────── */
+    print: function(text) {
+      if (/^={3,}/.test(text))              return;
+      if (/^-{3,}/.test(text))              return;
+      if (/library management/i.test(text)) return;
+
+      var cls = 'l-d';
+      if      (/^error:/i.test(text))                                                 cls = 'l-er';
+      else if (/success|book returned|book added|book issued/i.test(text))            cls = 'l-ok';
+      else if (/^\s*\d+\.\s/.test(text))                                              cls = 'l-sy';
+      else if (/status|available|issued|total/i.test(text))                           cls = 'l-sy';
+      else if (/enter|choose|id:|title:|author:|student|reg|search|choice/i.test(text)) cls = 'l-pr';
+
+      appendLog(text, cls);
+      parseStats(text);
+
+      /* ── Scroll-back for view ops (list / count) ─────────────────────
+         When C++ reprints "Enter your choice:" after options 5 or 6,
+         scroll the terminal back so the sentinel is at the top.
+         Repeating restore loop (10 × 50ms) to override the compiled WASM
+         EM_ASM which synchronously sets scrollTop = scrollHeight.       */
+      if (/enter your choice/i.test(text) && viewResultScrollPos > 0) {
+        viewResultScrollPos = -1;
+        pendingAction = '';
+        var restoreCount = 0;
+        (function restoreScroll() {
+          var anchor = document.getElementById('view-anchor');
+          if (anchor) anchor.scrollIntoView(true);
+          restoreCount++;
+          if (restoreCount < 10) setTimeout(restoreScroll, 50);
+          else if (anchor) anchor.remove(); /* cleanup after loop */
+        })();
+        return;   /* skip remaining print logic for this prompt line */
+      }
+
+      /* ── ADD ── */
+      if (/book added successfully/i.test(text)) {
+        var p = (pendingDetail||'').split(' | ');
+        /* p[0]=id  p[1]=title  p[2]=author */
+        if (p[0]) bookTitleMap[p[0]] = p[1] || p[0];   /* cache id→title */
+        syncAdd(p[0]||'', p[1]||'', p[2]||'');
+        addCircRow(p[0]||'—', p[1]||p[0]||'New Book', 'Added', 'sb-ok', '—');
+        var t = parseInt((document.getElementById('stat-total').textContent||'0').replace(/,/g,''))||0;
+        document.getElementById('stat-total').textContent = (t+1).toLocaleString();
+        var a = parseInt((document.getElementById('stat-avail').textContent||'0').replace(/,/g,''))||0;
+        document.getElementById('stat-avail').textContent = (a+1).toLocaleString();
+        pendingAction=''; pendingDetail='';
+      }
+
+      /* ── ISSUE ──
+         Match ONLY "Success: Book issued to X." — NOT display lines like
+         "ID: x | Status: Issued (Issued to: y)" which also contain "issued to" */
+      if (/^Success: Book issued to\s+\S+/i.test(text)) {
+        var p2   = (pendingDetail||'').split(' | ');
+        var rn   = (text.match(/issued to\s+(\S+)/i)||[])[1] || p2[1] || 'Patron';
+        var bid2 = p2[0] || '';
+        var bt2  = bookTitleMap[bid2] || bid2 || 'Book';
+        syncIssue(bid2, rn);
+        addCircRow(bid2, bt2, 'Issued', 'sb-iss', null);
+        var ii = parseInt((document.getElementById('stat-issued').textContent||'0').replace(/,/g,''))||0;
+        document.getElementById('stat-issued').textContent = (ii+1).toLocaleString();
+        var av = parseInt((document.getElementById('stat-avail').textContent||'0').replace(/,/g,''))||0;
+        if (av>0) document.getElementById('stat-avail').textContent = (av-1).toLocaleString();
+        pendingAction=''; pendingDetail='';
+      }
+
+      /* ── RETURN ── */
+      if (/success.*returned|book returned/i.test(text)) {
+        var p3   = (pendingDetail||'').split(' | ');
+        var bid3 = p3[0] || '';
+        var bt3  = bookTitleMap[bid3] || bid3 || 'Book';
+        syncReturn(bid3);
+        addCircRow(bid3, bt3, 'Returned', 'sb-ret', '—');
+        var ci = parseInt((document.getElementById('stat-issued').textContent||'0').replace(/,/g,''))||0;
+        if (ci>0) document.getElementById('stat-issued').textContent = (ci-1).toLocaleString();
+        var ca = parseInt((document.getElementById('stat-avail').textContent||'0').replace(/,/g,''))||0;
+        document.getElementById('stat-avail').textContent = (ca+1).toLocaleString();
+        pendingAction=''; pendingDetail='';
+      }
+
+      /* ── SEARCH result row ── */
+      if (/^id:/i.test(text) && pendingAction==='search') {
+        var srchId    = (text.match(/^id:\s*(\S+)/i)||[])[1] || '—';
+        var srchTitle = text.replace(/^id:\s*\S+\s*\|\s*title:\s*/i,'').split('|')[0].trim();
+        addCircRow(srchId, srchTitle, 'Found', 'sb-ret', '—');
+      }
+
+      /* ── ERROR ── */
+      if (/^error:/i.test(text)) {
+        var fdt = (pendingDetail||'').split(' | ')[0] || '—';
+        addCircRow(fdt, bookTitleMap[fdt] || '—', 'Failed', 'sb-err', '—');
+        pendingAction=''; pendingDetail='';
+      }
+    },
+
+    printErr: function(text) {
+      if (text && text.trim()) appendLog('[SYS] ' + text, 'l-er');
+    },
+
+    onRuntimeInitialized: function() {
+      document.getElementById('runtimeDot').className     = 'rt-dot on';
+      document.getElementById('runtimeStatus').textContent = 'ONLINE';
+      document.getElementById('terminal-input-row').style.display = 'flex';
+      document.getElementById('term-input').focus();
+      setTimeout(function() {
+        document.getElementById('output-wrapper').scrollTop = 0;
+      }, 400);
+    }
+  };
+</script>
+<script src="index.js"></script>
+</body>
+</html>
+
